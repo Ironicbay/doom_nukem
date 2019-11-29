@@ -1,0 +1,5 @@
+.vscode/settings.json
+wolf3d
+**/a.out
+**/obj/*
+**/*.a
