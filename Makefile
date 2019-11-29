@@ -77,7 +77,7 @@ all: $(SUBDIRS) $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
 	@ echo "$(YELLOW)Creating $@ executable$(WHITE)"
-	@ $(CC) -o $@ $(CFLAGS) $(OBJS) $(LIB) $(FRAMEWORK)
+	@ $(CC) -o $@ $(CFLAGS) $(OBJS) $(LIB) $(FRAMEWORK) -lm
 	@echo "$(GREEN)$@ executable created$(WHITE)"
 
 $(LIBFT): FORCE

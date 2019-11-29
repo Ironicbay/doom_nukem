@@ -74,22 +74,22 @@ SDL_Surface			*loadimage(char *path)
 
 short				loadmedia(t_data *data)
 {
-	data->surface[0] = loadimage("pics/2.png");
+	data->surface[0] = loadimage("pics/redbrick.png");
 	if (!data->surface[0])
 		return (0);
-	data->surface[1] = loadimage("pics/3.png");
+	data->surface[1] = loadimage("pics/bluestone.png");
 	if (!data->surface[1])
 		return (0);
-	data->surface[2] = loadimage("pics/5.png");
+	data->surface[2] = loadimage("pics/mossy.png");
 	if (!data->surface[2])
 		return (0);
-	data->surface[3] = loadimage("pics/6.png");
+	data->surface[3] = loadimage("pics/greystone.png");
 	if (!data->surface[3])
 		return (0);
-	data->surface[4] = loadimage("pics/floor.png");
+	data->surface[4] = loadimage("pics/5hd.png");
 	if (!data->surface[4])
 		return (0);
-	data->surface[5] = loadimage("pics/roof.png");
+	data->surface[5] = loadimage("pics/6hd.png");
 	if (!data->surface[5])
 		return (0);
 	return (1);
