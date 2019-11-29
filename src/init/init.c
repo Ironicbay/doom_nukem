@@ -97,7 +97,7 @@ short			init(t_data *data)
 	}
 	else
 	{
-		data->window = SDL_CreateWindow("Wolf3D", SDL_WINDOWPOS_UNDEFINED,
+		data->window = SDL_CreateWindow("Doom-Nukem", SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
 			SDL_WINDOW_SHOWN);
 		if (data->window)
