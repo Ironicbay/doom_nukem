@@ -6,12 +6,11 @@
 #    By: acostaz <acostaz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/19 16:17:52 by acostaz           #+#    #+#              #
-#    Updated: 2019/10/23 11:40:11 by acostaz          ###   ########.fr        #
+#    Updated: 2020/02/26 13:45:10 by acostaz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CFLAGS = -Wall -Werror -Wextra -MMD
-
 
 NAME = libft.a
 
@@ -71,7 +70,6 @@ SRC_NAME = ft_abs.c	\
 		   ft_putnbrendl.c \
 		   ft_putstr.c \
 		   ft_putstr_fd.c \
-		   ft_replace.c \
 		   ft_sqrt.c \
 		   ft_stralnum.c \
 		   ft_stralpha.c \
@@ -110,7 +108,13 @@ SRC_NAME = ft_abs.c	\
 		   ft_tolower.c \
 		   ft_toupper.c \
 		   get_next_line.c\
-		   ft_error.c
+		   ft_error.c\
+		   ft_replace.c\
+		   ft_strlen_chr.c\
+		   ft_strrev.c\
+		   ft_strtrimc.c\
+		   free_tab.c\
+	   	   ft_error_fd.c
 
 SRC_DIR = src
 BUILD_DIR = obj
@@ -118,6 +122,8 @@ INC_DIR = inc
 
 OBJ = $(addprefix $(BUILD_DIR)/,$(SRC_NAME:.c=.o))
 DPD = $(addprefix $(BUILD_DIR)/,$(SRC_NAME:.c=.d))
+
+INCLUDES = $(INC_DIR)/libft.h $(INC_DIR)/get_next_line.h $(INC_DIR)/ft_printf.h
 
 opti:
 	@$(MAKE) -j all
@@ -127,7 +133,7 @@ debug:
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(INC_DIR)/libft.h $(INC_DIR)/get_next_line.h $(INC_DIR)/ft_printf.h
+$(NAME): $(OBJ) $(INCLUDES)
 	@echo "\033[2K \033[A"
 	@ar rc $(NAME) $(OBJ)
 	@echo "\033[32m[$(NAME)]: compiled\033[0m"

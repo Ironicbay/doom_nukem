@@ -1,5 +1,7 @@
-.vscode/settings.json
 doom-nukem
-**/a.out
-**/obj/*
-**/*.a
+map_editor/obj/**
+map_editor/map_editor
+**/**.o
+**/**.d
+**/obj/**
+libft/libft.a

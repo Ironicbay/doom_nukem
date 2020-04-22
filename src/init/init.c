@@ -3,50 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmoucach <jmoucach@student.42.fr>          +#+  +:+       +#+        */
+/*   By: JP <JP@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 17:57:11 by jmoucach          #+#    #+#             */
-/*   Updated: 2019/11/11 17:46:01 by jmoucach         ###   ########.fr       */
+/*   Updated: 2020/04/17 17:53:30 by JP               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../hdr/wolf3d.h"
+#include "../../hdr/doom_nukem.h"
 
-void			nullify_surfaces(t_data *data)
-{
-	int			i;
-
-	i = -1;
-	while (++i < 6)
-		data->surface[i] = NULL;
-}
-
-short			create_renderer_texture_and_pixels(t_data *data)
+void		create_renderer_texture_and_pixels(t_data *data)
 {
 	if (!(data->renderer = SDL_CreateRenderer(data->window, -1, 0)))
-	{
-		ft_putstr_fd("Failed to create renderer! Error:", 2);
-		ft_putendl_fd(SDL_GetError(), 2);
-		return (0);
-	}
+		clean_exit(data, (char*)SDL_GetError());
 	else if (!(data->texture = SDL_CreateTexture(data->renderer,
 		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH,
 		SCREEN_HEIGHT)))
-	{
-		ft_putstr_fd("Failed to create texture! Error:", 2);
-		ft_putendl_fd(SDL_GetError(), 2);
-		return (0);
-	}
+		clean_exit(data, (char*)SDL_GetError());
 	else if (!(data->pixels = (Uint32 *)malloc(sizeof(Uint32) * SCREEN_WIDTH
-		* SCREEN_HEIGHT + 1)))
-	{
-		ft_putendl_fd("Failed to allocate pixels", 2);
-		return (0);
-	}
-	return (1);
+					* SCREEN_HEIGHT + 1)))
+		clean_exit(data, "Pixel array malloc error");
 }
 
-void			set_raycast_values(t_raycast *values, t_player player, int x)
+void		prepare_hud(t_data *data)
+{
+	if (TTF_Init() == -1)
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->hud.font = TTF_OpenFont("fonts/DooM.ttf", 50)))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->hud.hud_texture = loadimage_hud(data, "sprites/hud_bar.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	data->hud.hud_pos = (SDL_Rect){0, SCREEN_HEIGHT * 0.8,
+											SCREEN_WIDTH, 0.2 * SCREEN_HEIGHT};
+	if (!(data->hud.face_texture = loadimage_hud(data,
+												"sprites/doom_guy_face.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	data->hud.face_pos = (SDL_Rect){SCREEN_WIDTH / 2 - 50,
+						SCREEN_HEIGHT * 0.8 + 5, 100, 0.2 * SCREEN_HEIGHT - 5};
+	data->hud.text_color.r = 211;
+	data->hud.text_color.g = 2;
+	data->hud.text_color.b = 4;
+	data->hud.text_color.a = 255;
+	get_infinite_text(data);
+}
+
+void		set_raycast_values(t_raycast *values, t_player player, int x)
 {
 	values->camera = 2 * x / (double)SCREEN_WIDTH - 1;
 	values->ray.pos.x = player.pos.x;
@@ -63,54 +64,30 @@ void			set_raycast_values(t_raycast *values, t_player player, int x)
 	values->side = 0;
 }
 
-void			set_values(t_data *data)
+t_sprite	create_sprites(char *path, t_d_point scale, t_data *data)
 {
-	data->p.angle = 0 * M_PI / 180;
-	data->p.dir.x = 1;
-	data->p.dir.y = 0;
-	data->toggle_minimap = 0;
-	data->p.plane.x = 0;
-	data->p.plane.y = -0.66;
-	data->p.rspeed = 2;
-	data->p.sprintspeed = 6;
-	data->p.walkspeed = 3;
-	data->texture = NULL;
-	data->renderer = NULL;
-	data->window = NULL;
-	data->msize.x = 0;
-	data->msize.y = 0;
-	data->quit = 0;
-	data->sensitivity = 0.5;
-	data->yaw = 0;
-	if (!(data->surface = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 6)))
-		exit(EXIT_FAILURE);
-	nullify_surfaces(data);
+	t_sprite	sprite;
+
+	if (!(sprite.surf = loadimage(path)))
+		clean_exit(data, (char*)SDL_GetError());
+	sprite.scale.x = scale.x;
+	sprite.scale.y = scale.y;
+	return (sprite);
 }
 
-short			init(t_data *data)
+void		init(t_data *data)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
-	{
-		ft_putstr_fd("Failed to initialize! Error:", 2);
-		ft_putendl_fd(SDL_GetError(), 2);
-		return (0);
-	}
+		clean_exit(data, (char*)SDL_GetError());
 	else
 	{
 		data->window = SDL_CreateWindow("Doom-Nukem", SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
-			SDL_WINDOW_SHOWN);
+				SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
+				SDL_WINDOW_SHOWN);
 		if (data->window)
-		{
-			if (!create_renderer_texture_and_pixels(data))
-				return (0);
-		}
+			create_renderer_texture_and_pixels(data);
 		else
-		{
-			ft_putstr_fd("Failed to create window! Error:", 2);
-			ft_putendl_fd(SDL_GetError(), 2);
-			return (0);
-		}
+			clean_exit(data, (char*)SDL_GetError());
+		SDL_SetRelativeMouseMode(SDL_TRUE);
 	}
-	return (1);
 }

@@ -3,88 +3,75 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmoucach <jmoucach@student.42.fr>          +#+  +:+       +#+        */
+/*   By: JP <JP@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/19 14:14:06 by jmoucach          #+#    #+#             */
-/*   Updated: 2019/11/12 14:53:02 by jmoucach         ###   ########.fr       */
+/*   Updated: 2020/04/17 17:57:51 by JP               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../hdr/wolf3d.h"
+#include "../../hdr/doom_nukem.h"
 
-int		name_parser(char *file_name)
+short	name_parser(char *file_name)
 {
 	int	i;
 
 	i = ft_strlen(file_name);
-	if (!ft_strequ((file_name + i - 5), ".wolf"))
+	if (!ft_strequ((file_name + i - 5), ".doom"))
 	{
-		ft_putendl("Invalid map_name");
+		ft_putstr_fd("Invalid map_name", 2);
 		return (0);
 	}
 	return (1);
 }
 
-void	free_map(t_data *data)
+void	free_maps(t_data *data)
 {
-	int i;
+	int	i;
+	int	j;
 
-	i = data->msize.y - 1;
-	while (i >= 0)
+	j = -1;
+	while (++j < 4)
 	{
-		free(data->map[i]);
-		i--;
+		i = data->maps[j].height - 1;
+		while (i >= 0)
+		{
+			free(data->maps[j].map[i]);
+			i--;
+		}
+		free(data->maps[j].map);
 	}
-	free(data->map);
 }
 
-void	close_all(t_data *data)
+int		print_usage(void)
 {
-	int i;
-
-	i = 0;
-	if (data->pixels)
-		free(data->pixels);
-	if (data->texture)
-		SDL_DestroyTexture(data->texture);
-	if (data->renderer)
-		SDL_DestroyRenderer(data->renderer);
-	if (data->window)
-		SDL_DestroyWindow(data->window);
-	while (i < 6)
-	{
-		if (data->surface[i])
-			SDL_FreeSurface(data->surface[i]);
-		i++;
-	}
-	if (data->surface)
-		free(data->surface);
-	SDL_Quit();
+	ft_putendl("Usage :\t./doom_nukem\n\t./doom_nukem map.doom");
+	return (0);
 }
 
 int		main(int ac, char **av)
 {
-	t_data data;
+	t_data	data;
 
+	if (ac > 2)
+		return (print_usage());
+	set_values(&data, ac);
+	init(&data);
+	loadmedia(&data);
+	prepare_hud(&data);
+	new_map(&data, "maps/level_1.doom", 0);
+	new_map(&data, "maps/level_2.doom", 1);
+	new_map(&data, "maps/level_3.doom", 2);
 	if (ac == 2)
 	{
-		set_values(&data);
-		if (init(&data))
-		{
-			if (loadmedia(&data))
-			{
-				if (name_parser(av[1]) && new_map(&data, av[1]))
-				{
-					game_loop(&data);
-					free_map(&data);
-				}
-			}
-			close_all(&data);
-		}
+		if (name_parser(av[1]))
+			new_map(&data, av[1], 3);
 		else
-		{
-			ft_putstr_fd("Error in initialization!", 2);
-		}
+			clean_exit(&data, "");
 	}
-	return (1);
+	game_loop(&data);
+	free_maps(&data);
+	delete_cur_map(&data);
+	clean_exit(&data, NULL);
+	return (0);
 }

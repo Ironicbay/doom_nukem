@@ -3,115 +3,139 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jmoucach <jmoucach@student.42.fr>          +#+  +:+       +#+         #
+#    By: JP <JP@student.42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2019/04/26 16:03:44 by jmoucach          #+#    #+#              #
-#    Updated: 2019/11/26 12:16:52 by acostaz          ###   ########.fr        #
+#    Created: 2020/02/26 12:42:59 by acostaz           #+#    #+#              #
+#    Updated: 2020/03/25 16:07:41 by JP               ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+CFLAGS = -Wall -Werror -Wextra -MMD `sdl2-config --cflags` -O2
 
-################################################################################
-#								Colors										   #
-################################################################################
+NAME = doom-nukem
 
-RED= \033[31m
-WHITE= \033[0m
-GREEN= \033[32m
-CYAN= \033[36m
-BLUE= \033[34m
-YELLOW= \033[33m
-MAGENTA= \033[35m
+LIBFT = libft/libft.a
+MAP_EDITOR = map_editor/map_editor
 
-################################################################################
-#								Macros										   #
-################################################################################
-NAME= doom-nukem
-CC= gcc
-CFLAGS= -Wall -Wextra -Werror -g `sdl2-config --cflags` 
-SRC_DIR= src/
-SRC= init/main.c\
-	 init/init.c\
-	 draw/drawline.c\
-	 draw/draw_rect_to_sdl.c\
-	 draw/draw_minimap.c\
-	 draw/show_player.c\
-	 map/new_map.c\
-	 map/fill_map.c\
-	 map/parsing.c\
-	 png/check_png_signature.c \
-	 png/idat_block_extraction.c \
-	 png/idat_utils.c \
-	 png/parse_png.c \
-	 png/png_utils.c \
-	 png/png_utils2.c \
-	 png/post_processing.c \
-	 png/process_ihdr.c \
-	 png/process_idat.c \
-	 png/unfiltering.c \
-	 png/unfiltering_utils.c \
-	 png/zlib.c \
-	 raycasting/raycasting.c\
-	 raycasting/floorcaster.c\
-	 game/event_loop.c\
-	 game/movement.c\
-	 image/load_image.c
+SRC =	draw/display_hud.c\
+		draw/drawline.c\
+		draw/draw_minimap.c\
+		draw/draw_rect_to_sdl.c\
+		draw/show_player.c\
+		exit/clean_exit.c\
+		game/ammo.c\
+		game/combat.c\
+		game/doors.c\
+		game/event_loop.c\
+		game/flashing_screens.c\
+		game/game_inputs.c\
+		game/health.c\
+		game/menu_inputs.c\
+		game/movement.c\
+		game/weap_hits.c\
+		image/image_utils.c\
+		image/load_image.c\
+		image/load_media_hud.c\
+		image/shading.c\
+		init/create_sprites.c\
+		init/get_hud_text.c\
+		init/init.c\
+		init/main.c\
+		init/nullify.c\
+		init/set_values.c\
+		map/current_map.c\
+		map/default_map_values.c\
+		map/fill_map.c\
+		map/new_map.c\
+		map/new_map_utils.c\
+		map/parsing.c\
+		menu/menu.c\
+		menu/menu_selection.c\
+		objects/ammo_pickup.c\
+		objects/count_enemies.c\
+		objects/enemy_death.c\
+		objects/enemy_vision.c\
+		objects/get_obj_data.c\
+		objects/hud_keys.c\
+		objects/item_pickup.c\
+		objects/obj_list.c\
+		objects/pathfinder.c\
+		objects/state_machine.c\
+		objects/swap_obj.c\
+		raycasting/floorcaster.c\
+		raycasting/objectcasting.c\
+		raycasting/raycasting.c\
+		raycasting/set_objcast_values.c\
+		skybox/skybox.c\
+		story/display_story_screen.c\
+		story/text_screen_inputs.c\
+		weapon/use_bfg.c\
+		weapon/use_chainsaw.c\
+		weapon/use_handgun.c\
+		weapon/use_knuckle.c\
+		weapon/use_minigun.c\
+		weapon/use_plasma.c\
+		weapon/use_shotgun.c\
+		weapon/use_weapon.c
+
+SRC_DIR = src/
+OBJ_DIR = obj/
+INC_DIR = hdr/
+
 SRCS= $(addprefix $(SRC_DIR),$(SRC))
-OBJ_DIR= obj/
 OBJ= $(SRC:.c=.o)
-OBJ_SUBDIRS= init draw map raycasting game image png
+DPD= $(SRC:.c=.d)
+
+OBJ_SUBDIRS= init draw map raycasting game image skybox weapon \
+			 objects menu story exit
 OBJS= $(addprefix $(OBJ_DIR), $(OBJ))
 SUBDIRS= $(foreach dir, $(OBJ_SUBDIRS), $(OBJ_DIR)$(dir))
 LIB= `sdl2-config --libs` \
+	 `sdl2-config --libs`_ttf\
 	 -L libft -lft
-LIBFT= libft.a
-INCLUDES=	hdr/wolf3d.h\
+INCLUDES=	hdr/doom_nukem.h\
 			hdr/proto.h\
 			hdr/struct.h
 
-###############################################################################
-#								Rules										  #
-###############################################################################
+all: $(SUBDIRS)
+	@$(MAKE) all -C libft
+	@$(MAKE) all -C map_editor
+	@$(MAKE) -j $(NAME)
 
-all: $(SUBDIRS) $(NAME)
-
-$(NAME): $(LIBFT) $(OBJS)
-	@ echo "$(YELLOW)Creating $@ executable$(WHITE)"
-	@ $(CC) -o $@ $(CFLAGS) $(OBJS) $(LIB) $(FRAMEWORK) -lm
-	@echo "$(GREEN)$@ executable created$(WHITE)"
-
-$(LIBFT): FORCE
-	@ make -C libft 1>/dev/null
+$(NAME): $(OBJS) $(INCLUDES)
+	@echo "\033[2K \033[A"
+	@clang $(CFLAGS) -o $(NAME) $(OBJS) $(LIB) $(LIBFT) -lm
+	@echo "\033[32m[$(NAME)]: compiled\033[0m"
 
 $(SUBDIRS):
 	@ mkdir -p $(SUBDIRS)
 
-$(OBJ_DIR)%.o:$(SRC_DIR)%.c $(INCLUDES) Makefile
-	@ $(CC) -o $@ -c $< $(CFLAGS) $(SDL2_CFLAGS)
-	@ echo "$(GREEN)[✔]$(WHITE)$@"
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(LIBFT)
+	@ mkdir -p $(OBJ_DIR)
+	@ mkdir -p $(SUBDIRS)
+	@echo "\033[2K [$(NAME)]: Compilation of $< \033[A"
+	@clang $(CFLAGS) -I $(INC_DIR) -c $< -o $@
 
 clean:
-	@ echo "$(YELLOW)Deleting objects$(WHITE)"
-	@ for i in $(OBJ); do \
-		echo "$(RED)- Deleting $$i$(WHITE)"; \
-	done;
-	@ echo "$(GREEN)Objects deleted$(WHITE)"
-	@ rm -rf $(OBJS)
+	@$(MAKE) clean -C libft
+	@$(MAKE) clean -C map_editor
+	@rm -rf $(OBJ_DIR)
+	@echo "\033[33m[$(NAME)]: OBJ deleted\033[0m"
 
 fclean: clean
-	@ echo "$(BLUE)Cleaning libft$(WHITE)"
-	@ make -C libft fclean
-	@ echo "$(YELLOW)Deleting obj directory$(WHITE)"
-	@ rm -rf obj
-	@ echo "$(GREEN)Obj directory deleted$(WHITE)"
-	@ echo "$(GREEN)Executable deleted$(WHITE)"
-	@ rm -rf $(NAME)
+	@rm -f $(LIBFT)
+	@echo "\033[31m[$(LIBFT)]: deleted\033[0m"
+	@rm -f $(MAP_EDITOR)
+	@echo "\033[31m[$(MAP_EDITOR)]: deleted\033[0m"
+	@rm -f $(NAME)
+	@echo "\033[31m[$(NAME)]: deleted\033[0m"
 
-instalSDL:
-	brew install SDL2
+installSDL:
+	sudo apt-get install libsdl2-dev
+	sudo apt-get install libsdl2-ttf-dev
 
-re: fclean all
+re : fclean all
 
-FORCE:
+.PHONY: all, clean, fclean, re
 
-.PHONY: all re fclean clean
+-include $(DPD)

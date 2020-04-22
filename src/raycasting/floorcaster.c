@@ -6,11 +6,11 @@
 /*   By: jmoucach <jmoucach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 13:51:01 by jmoucach          #+#    #+#             */
-/*   Updated: 2019/11/26 15:22:53 by acostaz          ###   ########.fr       */
+/*   Updated: 2020/03/11 18:05:00 by acostaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../hdr/wolf3d.h"
+#include "../../hdr/doom_nukem.h"
 
 void			floor_side(t_floorcast *f, t_raycast *r)
 {
@@ -45,7 +45,7 @@ void			roofcaster(t_data *data, t_raycast *r, int x)
 	y = r->drawstart;
 	f.currentdist = 0;
 	floor_side(&f, r);
-	while (y > 0)
+	while (y >= 0)
 	{
 		f.currentdist = (double)SCREEN_HEIGHT / -(double)(2 * y
 			- (SCREEN_HEIGHT + data->yaw) + 1);
@@ -54,12 +54,11 @@ void			roofcaster(t_data *data, t_raycast *r, int x)
 			+ (1 - f.weight) * data->p.pos.x;
 		f.currentfloor.y = f.weight * f.floor.y
 			+ (1 - f.weight) * data->p.pos.y;
-		f.floortex.x = (int)(f.currentfloor.x * data->surface[5]->w)
-														% data->surface[5]->w;
-		f.floortex.y = (int)(f.currentfloor.y * data->surface[5]->h)
-														% data->surface[5]->h;
-		color = (get_pixel(data->surface[5], f.floortex.x, f.floortex.y));
-		data->pixels[x + y * SCREEN_WIDTH] = color;
+		f.floortex.x = (int)(f.currentfloor.x * 64) % 64;
+		f.floortex.y = (int)(f.currentfloor.y * 64) % 64;
+		color = (get_pixel(data->surface[4], f.floortex.x, f.floortex.y));
+		data->pixels[x + y * SCREEN_WIDTH] = shaded_color(data, color,
+														f.currentdist, NULL);
 		y--;
 	}
 }
@@ -82,13 +81,13 @@ void			floorcaster(t_data *data, t_raycast *r, int x)
 			+ (1 - f.weight) * data->p.pos.x;
 		f.currentfloor.y = f.weight * f.floor.y
 			+ (1 - f.weight) * data->p.pos.y;
-		f.floortex.x = (int)(f.currentfloor.x * data->surface[4]->w)
-														% data->surface[4]->w;
-		f.floortex.y = (int)(f.currentfloor.y * data->surface[4]->h)
-														% data->surface[4]->h;
-		color = (get_pixel(data->surface[4], f.floortex.x, f.floortex.y));
-		data->pixels[x + y * SCREEN_WIDTH] = color;
+		f.floortex.x = (int)(f.currentfloor.x * 64) % 64;
+		f.floortex.y = (int)(f.currentfloor.y * 64) % 64;
+		color = (get_pixel(data->surface[3], f.floortex.x, f.floortex.y));
+		data->pixels[x + y * SCREEN_WIDTH] = shaded_color(data, color,
+														f.currentdist, NULL);
 		y++;
 	}
-	roofcaster(data, r, x);
+	if (data->ceiling)
+		roofcaster(data, r, x);
 }

@@ -6,13 +6,13 @@
 /*   By: jmoucach <jmoucach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 18:22:58 by jmoucach          #+#    #+#             */
-/*   Updated: 2019/11/08 16:29:17 by jmoucach         ###   ########.fr       */
+/*   Updated: 2020/03/11 18:03:45 by acostaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../hdr/wolf3d.h"
+#include "../../hdr/doom_nukem.h"
 
-void			set_dist_and_step(t_raycast *r)
+void	set_dist_and_step(t_raycast *r)
 {
 	if (r->ray.dir.x < 0)
 	{
@@ -36,28 +36,21 @@ void			set_dist_and_step(t_raycast *r)
 	}
 }
 
-void			get_texturing_values(t_raycast *r, t_data *data)
+void	get_texturing_values(t_raycast *r, t_data *data)
 {
 	if (r->side == 0)
 	{
 		r->walldist = fabs((r->m_pos.x - r->ray.pos.x + (1 - r->step.x) / 2)
-			/ r->ray.dir.x);
-		if (r->ray.dir.x > 0)
-			r->texnum = 0;
-		else
-			r->texnum = 1;
+				/ r->ray.dir.x);
 		r->wall = r->ray.pos.y + r->walldist * r->ray.dir.y;
 	}
 	else
 	{
 		r->walldist = fabs((r->m_pos.y - r->ray.pos.y + (1 - r->step.y) / 2)
-			/ r->ray.dir.y);
-		if (r->ray.dir.y > 0)
-			r->texnum = 2;
-		else
-			r->texnum = 3;
+				/ r->ray.dir.y);
 		r->wall = r->ray.pos.x + r->walldist * r->ray.dir.x;
 	}
+	r->texnum = data->cur_map.map[r->m_pos.x][r->m_pos.y] - 1;
 	r->wall -= floor(r->wall);
 	r->texw = data->surface[r->texnum]->w;
 	r->texh = data->surface[r->texnum]->h;
@@ -65,7 +58,7 @@ void			get_texturing_values(t_raycast *r, t_data *data)
 	r->lineheight = abs((int)(SCREEN_HEIGHT / r->walldist));
 }
 
-void			hit_wall(t_raycast *r, t_data *data)
+void	hit_wall(t_raycast *r, t_data *data)
 {
 	while (r->hit == 0)
 	{
@@ -81,14 +74,12 @@ void			hit_wall(t_raycast *r, t_data *data)
 			r->m_pos.y += r->step.y;
 			r->side = 1;
 		}
-		if (data->map[r->m_pos.x][r->m_pos.y] > 0)
-		{
+		if (data->cur_map.map[r->m_pos.x][r->m_pos.y] > 0)
 			r->hit = 1;
-		}
 	}
 }
 
-void			give_draw_values(t_raycast *r, t_data *data)
+void	give_draw_values(t_raycast *r, t_data *data)
 {
 	if (r->lineheight < 0)
 		r->lineheight = SCREEN_HEIGHT;
@@ -97,36 +88,35 @@ void			give_draw_values(t_raycast *r, t_data *data)
 		r->drawstart = 0;
 	r->drawend = r->lineheight / 2 + (SCREEN_HEIGHT + data->yaw) / 2;
 	if (r->drawend >= SCREEN_HEIGHT)
-		r->drawend = SCREEN_HEIGHT - 1;
+		r->drawend = SCREEN_HEIGHT;
 	if (r->drawend < 0)
-		r->drawend = SCREEN_HEIGHT - 1;
+		r->drawend = SCREEN_HEIGHT;
 }
 
-void			raycasting(t_data *data)
+void	raycasting(t_data *data)
 {
 	t_raycast	r;
-	t_player	player;
 	t_point		pt;
 
 	pt.x = -1;
-	player = data->p;
 	while (++pt.x < SCREEN_WIDTH)
 	{
-		set_raycast_values(&r, player, pt.x);
+		set_raycast_values(&r, data->p, pt.x);
 		set_dist_and_step(&r);
 		hit_wall(&r, data);
 		get_texturing_values(&r, data);
 		give_draw_values(&r, data);
-		pt.y = r.drawstart;
-		while (pt.y <= r.drawend)
+		pt.y = r.drawstart - 1;
+		while (++pt.y <= r.drawend && is_in_frame(pt))
 		{
 			r.tex.y = (pt.y * 2 - (SCREEN_HEIGHT + data->yaw) + r.lineheight)
-				* (r.texh / 2) / (r.lineheight + 1);
+											* (r.texh / 2) / (r.lineheight + 1);
 			r.color = get_pixel(data->surface[r.texnum],
-				r.tex.x, r.tex.y);
-			data->pixels[pt.x + pt.y * SCREEN_WIDTH] = r.color;
-			pt.y++;
+								r.tex.x, r.tex.y);
+			data->pixels[pt.x + pt.y * SCREEN_WIDTH] = shaded_color(data,
+													r.color, r.walldist, NULL);
 		}
+		data->zbuffer[pt.x] = r.walldist;
 		floorcaster(data, &r, pt.x);
 	}
 }

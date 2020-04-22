@@ -6,11 +6,11 @@
 /*   By: jmoucach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 13:39:30 by jmoucach          #+#    #+#             */
-/*   Updated: 2018/12/21 13:39:33 by jmoucach         ###   ########.fr       */
+/*   Updated: 2020/02/26 13:13:47 by acostaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/libft.h"
+#include "libft.h"
 
 char	*ft_replace(char *str, char find, char replace)
 {

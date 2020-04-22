@@ -6,20 +6,16 @@
 /*   By: jmoucach <jmoucach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/21 09:42:14 by jmoucach          #+#    #+#             */
-/*   Updated: 2019/11/26 12:21:57 by acostaz          ###   ########.fr       */
+/*   Updated: 2020/03/11 16:51:44 by acostaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../hdr/wolf3d.h"
+#include "../../hdr/doom_nukem.h"
 
-/*
-** A remplacer par mon parser de PNG
-*/
-
-Uint32				get_pixel(SDL_Surface *s, int x, int y)
+Uint32			get_pixel(SDL_Surface *s, int x, int y)
 {
-	int				bpp;
-	Uint8			*p;
+	int		bpp;
+	Uint8	*p;
 
 	bpp = s->format->BytesPerPixel;
 	p = s->pixels + y * s->pitch + x * bpp;
@@ -33,64 +29,67 @@ Uint32				get_pixel(SDL_Surface *s, int x, int y)
 		return (*(Uint32*)p);
 }
 
-void				free_png_img(t_img png)
+SDL_Surface		*loadimage(char *path)
 {
-	unsigned int	i;
+	SDL_Surface *loadedsurface;
 
-	i = 0;
-	while (i < png.height)
-	{
-		free(png.pixels[i]);
-		i++;
-	}
-	free(png.pixels);
-}
-
-SDL_Surface			*loadimage(char *path)
-{
-	SDL_Surface		*loadedsurface;
-	t_img			png;
-	int				h;
-
-	if (parse_png(path, &png) == PB)
-		return (NULL);
-	loadedsurface = SDL_CreateRGBSurface(0, png.width, png.height, 32,
-			0xff000000, 0x00ff0000, 0x000000ff00, 0x000000ff);
-	h = -1;
-	while (++h < (int)png.height)
-		ft_memcpy(loadedsurface->pixels + png.width * h * 4,
-								png.pixels[h], png.width * 4);
-	free_png_img(png);
+	loadedsurface = SDL_LoadBMP(path);
 	if (!loadedsurface)
-	{
-		ft_putstr_fd("Couldn't load image:", 2);
-		ft_putendl_fd(path, 2);
-		ft_putstr_fd("Error: ", 2);
-		ft_putendl_fd(SDL_GetError(), 2);
 		return (NULL);
-	}
 	return (loadedsurface);
 }
 
-short				loadmedia(t_data *data)
+void			load_menu(t_data *data)
 {
-	data->surface[0] = loadimage("pics/redbrick.png");
-	if (!data->surface[0])
-		return (0);
-	data->surface[1] = loadimage("pics/bluestone.png");
-	if (!data->surface[1])
-		return (0);
-	data->surface[2] = loadimage("pics/mossy.png");
-	if (!data->surface[2])
-		return (0);
-	data->surface[3] = loadimage("pics/greystone.png");
-	if (!data->surface[3])
-		return (0);
-	data->surface[4] = loadimage("pics/5hd.png");
-	if (!data->surface[4])
-		return (0);
-	data->surface[5] = loadimage("pics/6hd.png");
-	if (!data->surface[5])
-		return (0);
-	return (1);
+	if (!(data->surface[9] = loadimage("pics/menu/menu_titles.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[10] = loadimage("pics/menu/menu_custom.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[11] = loadimage("pics/menu/menu_background.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[12] = loadimage("pics/menu/menu_arrow.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[13] = loadimage("pics/story/dead.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[14] = loadimage("pics/story/start1.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[15] = loadimage("pics/story/start2.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[16] = loadimage("pics/story/start3.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[17] = loadimage("pics/story/end1.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[18] = loadimage("pics/story/end2.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[19] = loadimage("pics/story/end3.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+}
+
+void			load_skybox(t_data *data)
+{
+	if (!(data->surface[7] = loadimage("pics/skybox/skybox_2.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[8] = loadimage("pics/skybox/skybox_3.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+}
+
+void			loadmedia(t_data *data)
+{
+	if (!(data->surface[0] = loadimage("pics/bluestone.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[1] = loadimage("pics/greystone.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[2] = loadimage("pics/mossy.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[3] = loadimage("pics/tile2.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[4] = loadimage("pics/wood.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[5] = loadimage("pics/redbrick.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	if (!(data->surface[6] = loadimage("pics/keydoor.bmp")))
+		clean_exit(data, (char*)SDL_GetError());
+	load_skybox(data);
+	load_menu(data);
+	load_media_hud_1(data);
 }

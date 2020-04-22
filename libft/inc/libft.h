@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acostaz <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: jmoucach <jmoucach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/07 16:45:12 by acostaz           #+#    #+#             */
-/*   Updated: 2019/09/12 12:03:22 by sjulliot         ###   ########.fr       */
+/*   Updated: 2020/03/04 15:48:03 by jmoucach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define LIBFT_H
 
 # include <stdlib.h>
-# include "get_next_line.h"
-# include "ft_printf.h"
 
 typedef struct		s_list
 {
@@ -104,5 +102,10 @@ int					ft_find_next_prime(int nb);
 int					ft_padicval(int nb, int p);
 void				ft_error(char *str);
 char				*ft_replace(char *str, char find, char replace);
+int					ft_strlen_chr(char const *s, char c);
+char				*ft_strrev(char *str);
+char				*ft_strtrimc(char *s, char c);
+int					ft_error_fd(char *str, int fd);
+void				free_tab(char **tab);
 
 #endif
