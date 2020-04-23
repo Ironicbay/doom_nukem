@@ -1,6 +1,6 @@
 `make installSDL` pour la lib
 
-Tu peux creer une map via l'editeur dans son dossier (tout se compile avec le makefile principal), si son usage est pas clair c'est un feedback interessant
+Tu peux creer une map via l'editeur (tout se compile avec le makefile principal), si son usage est pas clair c'est un feedback interessant
 
 Tu peux link une map en argument de l'executable doom-nukem, ca ajoutera une option dans le menu
 
