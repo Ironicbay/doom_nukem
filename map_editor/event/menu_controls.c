@@ -32,16 +32,16 @@ void			ft_menu_event(t_mouse *mous, SDL_Event e)
 		if (e.button.button == SDL_BUTTON_LEFT)
 		{
 			SDL_GetMouseState(&tmx, &tmy);
-			if (tmx >= 1120 && tmx <= 1560 && tmy >= 120 && tmy <= 600)
+			if (tmx >= 1120 && tmx <= 1355 && tmy >= 120 && tmy <= 600)
 			{
 				x = (tmx - 1120) / 80;
 				y = (tmy - 120) / 80;
 				i = y * 3 + x + 1;
 				set_mous_loop(mous, i);
 			}
-			if (tmx >= 1120 && tmx <= (1120 + 230) && tmy >= 650 && tmy <= (650 + 112))
+			if (tmx >= 1120 && tmx <= 1350 && tmy >= 650 && tmy <= 762)
 				set_mous_loop(mous, 0);
-			if (tmx >= 1120 && tmx <= (1120 + 230) && tmy >= 782 && tmy <= (782 + 112))
+			if (tmx >= 1120 && tmx <= 1350 && tmy >= 782 && tmy <= 894)
 				set_mous_loop(mous, -1);
 		}
 	}

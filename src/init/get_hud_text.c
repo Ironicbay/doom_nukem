@@ -21,10 +21,11 @@ void				get_infinite_text(t_data *data)
 short				get_hud_text(t_data *data, char *text, SDL_Texture **tex)
 {
 	SDL_Surface		*tmp;
-	short return_value;
+	short			return_value;
 
 	return_value = 1;
-	if (tex) {
+	if (tex)
+	{
 		if (*text)
 			SDL_DestroyTexture(*tex);
 		tmp = TTF_RenderText_Solid(data->hud.font, text, data->hud.text_color);

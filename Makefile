@@ -10,12 +10,12 @@
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS = -Wall -Werror -Wextra -MMD `sdl2-config --cflags` -O2
+CFLAGS = -Wall -Werror -Wextra -MMD `sdl2-config --cflags`
 
 NAME = doom-nukem
 
 LIBFT = libft/libft.a
-MAP_EDITOR = map_editor/map_editor
+MAP_EDITOR = mapeditor
 
 SRC =	draw/display_hud.c\
 		draw/drawline.c\

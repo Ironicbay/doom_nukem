@@ -24,15 +24,17 @@ int			ft_conform_char(char c)
 			|| c == 'B'
 			|| c == 'C'
 			|| c == 'A'
-			|| c == 'H'
-			/*|| c == 'O'removing pillar*/)
+			|| c == 'H')
 		return (1);
 	return (0);
 }
 
 /*
-** This function transforms every wrong value we have in the mp (cf function above) into ',' AND keeps only the last digit of numbers above 10 (replaces the other digits with ',')
+** This function transforms every wrong value we have in the mp (cf function
+**above) into ',' AND keeps only the last digit of numbers above 10 (replaces
+**the other digits with ',')
 */
+
 char		*ft_conform_line(char *str)
 {
 	int		i;
@@ -51,6 +53,5 @@ char		*ft_conform_line(char *str)
 		}
 	}
 	str[i] = '\0';
-	ft_putendl(str);//DEBUG
 	return (str);
 }

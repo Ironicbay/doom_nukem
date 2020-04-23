@@ -41,18 +41,6 @@ void		ft_free_line(t_line *list)
 	}
 	free(list);
 }
-/*
-static void	free_surfaces(t_data *data)
-{
-	int	i;
-	if (data->surface && (i = -1))
-	{
-		while (++i < 20)
-			if (data->surface[i])
-				SDL_FreeSurface(data->surface[i]);
-		free(data->surface);
-	}
-}*/
 
 static void	ft_free_textures(t_fdf *img)
 {
@@ -68,37 +56,28 @@ static void	ft_free_textures(t_fdf *img)
 			img->texture[i] = NULL;
 		}
 		free(img->texture);
-	}	
+	}
 }
 
 void		ft_clean_exit(t_fdf *img, char *err)
 {
 	if (err)
 		ft_putendl_fd(err, 2);
-	ft_putendl("Ok1");
 	ft_free_textures(img);
-	ft_putendl("Ok2");
 	if (img->grid != NULL)
 		SDL_DestroyTexture(img->grid);
-	ft_putendl("Ok3");
 	if (img->renderer != NULL)
 		SDL_DestroyRenderer(img->renderer);
-	ft_putendl("Ok4");
 	if (img->pixels != NULL)
 		free(img->pixels);
-	ft_putendl("Ok5");
 	if (img->window)
 		SDL_DestroyWindow(img->window);
-	ft_putendl("Ok6");
 	if (TTF_WasInit())
 		TTF_Quit();
-	ft_putendl("Ok7");
 	if (SDL_WasInit(SDL_INIT_VIDEO) & SDL_INIT_VIDEO)
 		SDL_Quit();
-	ft_putendl("Ok8");
 	if (err)
 		exit(EXIT_FAILURE);
 	else
 		exit(EXIT_SUCCESS);
-	ft_putendl("Ok9");
 }

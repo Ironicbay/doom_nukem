@@ -10,9 +10,9 @@
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS = -Wall -Werror -Wextra -MMD `sdl2-config --cflags` -O2
+CFLAGS = -Wall -Werror -Wextra -MMD `sdl2-config --cflags`
 
-NAME = map_editor
+NAME = mapeditor
 
 LIBFT = ../libft/libft.a
 
@@ -34,7 +34,8 @@ SRC = init/main.c \
 	   tools/colorize.c \
 	   tools/fix_coords.c \
 	   tools/free_functions.c \
-	   tools/GNL_incoming_map.c \
+	   tools/free_path_tab.c \
+	   tools/gnl_incoming_map.c \
 	   tools/change_appearance.c \
 	   init/center_map.c \
 	   init/mouse_and_key_init.c \
@@ -59,11 +60,11 @@ LIB= `sdl2-config --libs` \
 INCLUDES= ../hdr/map_editor.h
 
 all: $(SUBDIRS)
-	@$(MAKE) -j $(NAME)
+	@$(MAKE) -j ../$(NAME)
 
-$(NAME): $(OBJS) $(INCLUDES)
+../$(NAME): $(OBJS) $(INCLUDES)
 	@echo "\033[2K \033[A"
-	@clang $(CFLAGS) -o $(NAME) $(OBJS) $(LIB) $(LIBFT) -lm
+	@clang $(CFLAGS) -o ../$(NAME) $(OBJS) $(LIB) $(LIBFT) -lm
 	@echo "\033[32m[$(NAME)]: compiled\033[0m"
 
 $(SUBDIRS):
@@ -80,11 +81,12 @@ clean:
 	@echo "\033[33m[$(NAME)]: OBJ deleted\033[0m"
 
 fclean: clean
-	@rm -f $(NAME)
+	@rm -f ../$(NAME)
 	@echo "\033[31m[$(NAME)]: deleted\033[0m"
 
-instalSDL:
-	brew install SDL2
+installSDL:
+	sudo apt-get install libsdl2-dev
+	sudo apt-get install libsdl2-ttf-dev
 
 re : fclean all
 

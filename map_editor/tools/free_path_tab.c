@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mouse_and_key_init.c                               :+:      :+:    :+:   */
+/*   free_path_tab.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jpoulvel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 12:45:00 by jpoulvel          #+#    #+#             */
-/*   Updated: 2020/03/04 22:29:26 by jpoulvel         ###   ########.fr       */
+/*   Created: 2020/03/04 18:22:53 by jpoulvel          #+#    #+#             */
+/*   Updated: 2020/03/10 19:19:38 by jpoulvel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../hdr/map_editor.h"
 
-int		ft_mouse_init(t_mouse *mous)
+void			free_path_tab(char **path_tab)
 {
-	mous->click = 0;
-	mous->loop = 1;
-	return (1);
-}
+	short		i;
 
-int		ft_key_init(t_key *key)
-{
-	key->up = 0;
-	key->down = 0;
-	key->left = 0;
-	key->right = 0;
-	key->zoom_in = 0;
-	key->zoom_out = 0;
-	return (1);
+	i = -1;
+	while (++i < 22)
+		if (path_tab[i])
+			free(path_tab[i]);
+	free(path_tab);
 }

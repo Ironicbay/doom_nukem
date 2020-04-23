@@ -26,8 +26,6 @@ int				atoi_or_number(char *str)
 		return (10);
 	else if (str[0] == '7')
 		return (11);
-	/*else if (str[0] == 'O')
-		return (12);removing pillar*/
 	else if (str[0] == 'S')
 		return (13);
 	else if (str[0] == 'B')
@@ -37,9 +35,9 @@ int				atoi_or_number(char *str)
 	else if (str[0] == 'H')
 		return (16);
 	else if (str[0] == 'K')
-        return (17);
+		return (17);
 	else if (str[0] == 'A')
-        return (18);
+		return (18);
 	return (0);
 }
 

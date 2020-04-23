@@ -1,6 +1,6 @@
 doom-nukem
 map_editor/obj/**
-map_editor/map_editor
+mapeditor
 **/**.o
 **/**.d
 **/obj/**

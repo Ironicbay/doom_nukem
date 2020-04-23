@@ -18,31 +18,15 @@ void		ft_origin(t_map *map)
 	map->oy = (HEIGHT - ((map->y) * map->base_gap)) / 2;
 }
 
-float		ft_height(t_map *map)
-{
-	float	height;
-
-	if (map->zmax >= 1 && map->zmax < 50)
-		height = 50 / map->base_gap;
-	else if (map->zmax >= 50 && map->zmax < 100)
-		height = 10 / map->base_gap;
-	else if (map->zmax >= 100 && map->zmax < 500)
-		height = 1 / (2 * map->base_gap);
-	//if (map->zmax >= 500)
-	else
-		height = 1 / (10 * map->base_gap);
-	return (height);
-}
-
 int			ft_gap(t_map *map)
 {
-	int		gap_H;
-	int		gap_W;
+	int		gap_h;
+	int		gap_w;
 
-	gap_H = (HEIGHT * 0.9) / map->y;
-	gap_W = (1120 * 0.9) / map->x;
-	if (gap_H > gap_W)
-		return (gap_W);
+	gap_h = (HEIGHT * 0.9) / map->y;
+	gap_w = (1120 * 0.9) / map->x;
+	if (gap_h > gap_w)
+		return (gap_w);
 	else
-		return (gap_H);
+		return (gap_h);
 }

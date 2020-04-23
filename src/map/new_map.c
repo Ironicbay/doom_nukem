@@ -69,6 +69,14 @@ void			new_map(t_data *data, char *title, short id)
 	int			fd;
 	char		*str;
 
+	fd = open(title, O_NOCTTY | O_RDONLY | O_NOFOLLOW | O_NONBLOCK);
+	if (fd < 0)
+		clean_exit(data, "Couldn't open map");
+	close(fd);
+	fd = open(title, O_DIRECTORY);
+	if (fd >= 0)
+		clean_exit(data, "Map is a directory, not a file");
+	close(fd);
 	if (map_too_big(title))
 		clean_exit(data, "Map is too big or has too many enemies");
 	fd = open(title, O_NOCTTY | O_RDONLY | O_NOFOLLOW | O_NONBLOCK);

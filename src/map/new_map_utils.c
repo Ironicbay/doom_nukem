@@ -49,9 +49,9 @@ short			map_too_big(char *name)
 	int			objects;
 	char		*line;
 
-	fd = open(name, O_NOCTTY | O_RDONLY | O_NOFOLLOW | O_NONBLOCK);
 	len = 0;
 	objects = 0;
+	fd = open(name, O_NOCTTY | O_RDONLY | O_NOFOLLOW | O_NONBLOCK);
 	while (get_next_line(fd, &line) > 0)
 	{
 		len += ft_strlen(line);

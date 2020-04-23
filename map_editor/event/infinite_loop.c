@@ -24,7 +24,7 @@ void			ft_infinite_loop(t_fdf *img, t_mouse *mous)
 		{
 			if (event.type == SDL_QUIT)
 				isquit = 1;
-			ft_menu_event( mous, event);
+			ft_menu_event(mous, event);
 			ft_keys_event(img, event);
 			ft_mouse_event(img, mous, event);
 		}
@@ -32,11 +32,11 @@ void			ft_infinite_loop(t_fdf *img, t_mouse *mous)
 	}
 }
 
-void		ft_fdf(t_map *map, char *map_name)
+void			ft_fdf(t_map *map, char *map_name)
 {
-	t_fdf	*img;
-	t_mouse	mous;
-	t_key	key;
+	t_fdf		*img;
+	t_mouse		mous;
+	t_key		key;
 
 	if (!(img = ft_ptr_init(map_name)))
 		ft_clean_exit(img, "Problems during main structure creation");

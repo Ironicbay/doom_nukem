@@ -13,8 +13,8 @@
 #ifndef DOOM_NUKEM_H
 # define DOOM_NUKEM_H
 
-# include "/usr/include/SDL2/SDL.h"
-# include "/usr/include/SDL2/SDL_ttf.h"
+# include "SDL.h"
+# include "SDL_ttf.h"
 # include "struct.h"
 # include "proto.h"
 # include "../libft/inc/libft.h"

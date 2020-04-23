@@ -28,12 +28,23 @@ t_line			*ft_newline(void const *content)
 	return (new);
 }
 
+static void		add_new_line(char *linetmp, t_line **line)
+{
+	t_line		*tmp;
+	t_line		*tmp2;
+
+	tmp = *line;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp2 = ft_newline(linetmp);
+	tmp2->prev = tmp;
+	tmp->next = tmp2;
+}
+
 t_line			*ft_list_alloc(int fd)
 {
 	char		*linetmp;
 	t_line		*line;
-	t_line		*tmp;
-	t_line		*tmp2;
 
 	line = NULL;
 	while (get_next_line(fd, &linetmp) > 0)
@@ -44,15 +55,9 @@ t_line			*ft_list_alloc(int fd)
 				return (NULL);
 		}
 		else
-		{
-			tmp = line;
-			while (tmp->next)
-				tmp = tmp->next;
-			tmp2 = ft_newline(linetmp);
-			tmp2->prev = tmp;
-			tmp->next = tmp2;
-		}
+			add_new_line(linetmp, &line);
 		free(linetmp);
 	}
+	free(linetmp);
 	return (line);
 }

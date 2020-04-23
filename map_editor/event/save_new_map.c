@@ -24,8 +24,8 @@ void		write_objects(int i, int fd)
 		ft_putchar_fd('D', fd);
 	else if (i == 11)
 		ft_putchar_fd('7', fd);
-	//else if (i == 12)
-		//ft_putchar_fd('O', fd);removing pillar
+	else if (i == 12)
+		ft_putchar_fd('0', fd);
 	else if (i == 13)
 		ft_putchar_fd('S', fd);
 	else if (i == 14)
@@ -49,7 +49,7 @@ void		write_tab(int **tab, int width, int height, int fd)
 	while (++y < height)
 	{
 		x = -1;
-		while (++x < width -1)
+		while (++x < width - 1)
 		{
 			if (tab[y][x] <= 6)
 				ft_putnbr_fd(tab[y][x], fd);
@@ -58,7 +58,7 @@ void		write_tab(int **tab, int width, int height, int fd)
 			ft_putchar_fd(',', fd);
 		}
 		ft_putnbr_fd(tab[y][x], fd);
-		if (y != height -1)
+		if (y != height - 1)
 			ft_putchar_fd('\n', fd);
 	}
 }
@@ -79,7 +79,6 @@ void		ft_save_map(t_fdf *img)
 		ft_error_fd("Unable to write in the map file", 2);
 	}
 	write_tab(int_tab, width, height, fd);
-	//free_tab(img->map->map); // KEEP IT OR REMOVE IT?
 	ft_putstr("Map updated succesfully\n");
 	ft_clean_exit(img, NULL);
 }

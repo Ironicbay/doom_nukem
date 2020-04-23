@@ -12,24 +12,6 @@
 
 #include "../../hdr/map_editor.h"
 
-/*void		ft_modify_height(int key, t_fdf *ptr)
-{
-	if (ptr->map->zmax < 100)
-	{
-		if (key == 12 && ptr->map->proj == 'I')
-			ptr->map->base_h += 1;
-		if (key == 6 && ptr->map->proj == 'I')
-			ptr->map->base_h -= 1;
-	}
-	else
-	{
-		if (key == 12 && ptr->map->proj == 'I')
-			ptr->map->base_h += 0.1;
-		if (key == 6 && ptr->map->proj == 'I')
-			ptr->map->base_h -= 0.1;
-	}
-}*/
-
 void		ft_zoom(t_key *key, t_map *map)
 {
 	if (key->zoom_in == 1)

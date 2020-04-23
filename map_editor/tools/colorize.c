@@ -12,7 +12,7 @@
 
 #include "../../hdr/map_editor.h"
 
-SDL_Color		ft_hexa_to_SDL(int color)
+SDL_Color		ft_hexa_to_sdl(int color)
 {
 	SDL_Color	col;
 
