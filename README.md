@@ -1,6 +1,8 @@
 # Doom-Nukem
 
-To install the library : make installSDL
+A short FPS game inspired by old school shooters, mainly DOOM, done in ray-casting.
+
+To install the library on linux : make installSDL
 
 Menu commands
 	- WASD : move the cursor
