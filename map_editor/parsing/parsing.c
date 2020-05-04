@@ -36,10 +36,12 @@ t_map			*ft_parser(int fd)
 
 	list = ft_list_alloc(fd);
 	map = ft_map_init(list);
-	if (map == NULL || ft_check_equal_length(list) == 0)
+	if (map == NULL || ft_check_equal_length(list->next) == 0)
 	{
-		map != NULL ? ft_free_map(map) : 0;
-		list != NULL ? ft_free_line(list) : 0;
+		if (map)
+			ft_free_map(map);
+		if (list)
+			ft_free_line(list);
 		return (NULL);
 	}
 	ft_free_line(list);

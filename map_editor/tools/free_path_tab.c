@@ -17,7 +17,7 @@ void			free_path_tab(char **path_tab)
 	short		i;
 
 	i = -1;
-	while (++i < 22)
+	while (++i < 26)
 		if (path_tab[i])
 			free(path_tab[i]);
 	free(path_tab);

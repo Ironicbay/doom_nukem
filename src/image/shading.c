@@ -44,5 +44,7 @@ Uint32			shaded_color(t_data *data, Uint32 color, double dist,
 	tmp.channel[0] *= lbd;
 	tmp.channel[1] *= lbd;
 	tmp.channel[2] *= lbd;
+	if (color == 0x010101)
+		tmp.number = 0x010101;
 	return (tmp.number);
 }

@@ -24,8 +24,8 @@ int				atoi_or_number(char *str)
 		return (9);
 	else if (str[0] == 'D')
 		return (10);
-	else if (str[0] == '7')
-		return (11);
+	else if (str[0] == '7' || str[0] == '8')
+		return (str[0] == '7' ? 11 : 12);
 	else if (str[0] == 'S')
 		return (13);
 	else if (str[0] == 'B')
@@ -89,6 +89,15 @@ int				*ft_fill_map(char *charline, int *len)
 	return (line);
 }
 
+static void		*free_map_and_return(t_map *map, short which)
+{
+	if (which == 0)
+		free(map);
+	if (which == 1)
+		ft_free_map(map);
+	return (NULL);
+}
+
 t_map			*ft_map_copy(t_line *list)
 {
 	t_line		*tmp;
@@ -103,14 +112,15 @@ t_map			*ft_map_copy(t_line *list)
 	tmp = list;
 	while (tmp->next)
 		tmp = tmp->next;
-	map->y = tmp->y + 1;
+	map->y = tmp->y;
 	if (!(map->map = malloc(sizeof(int *) * (map->y + 1))))
-		return (0);
-	tmp = list;
+		return (free_map_and_return(map, 0));
+	tmp = list->next;
 	while (++i < map->y)
 	{
 		conform_line = ft_conform_line(tmp->str);
-		map->map[i] = ft_fill_map(conform_line, &tmp->x);
+		if (!(map->map[i] = ft_fill_map(conform_line, &tmp->x)))
+			return (free_map_and_return(map, 1));
 		map->x = tmp->x;
 		tmp = tmp->next;
 	}

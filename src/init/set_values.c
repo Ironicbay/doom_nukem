@@ -14,14 +14,17 @@
 
 static void	alloc_data_structs(t_data *data)
 {
-	if (!(data->surface = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 20)))
+	if (!(data->surface = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * 21)))
 		clean_exit(data, "Surface malloc error");
-	nullify_tab((void**)data->surface, 20);
+	nullify_tab((void**)data->surface, 21);
 	if (!(data->obj_sprite = (t_sprite*)malloc(sizeof(t_sprite) * 44)))
 		clean_exit(data, "Object sprite malloc error");
 	nullify_sprites(data->obj_sprite, 44);
 	if (!(data->zbuffer = (double *)malloc(sizeof(double) * SCREEN_WIDTH)))
 		clean_exit(data, "ZBuffer malloc error");
+	if (!(data->e_zbuffer = (double *)malloc(sizeof(double)
+					* SCREEN_WIDTH * SCREEN_HEIGHT)))
+		clean_exit(data, "Enemy ZBuffer malloc error");
 	if (!(data->sprites = (SDL_Texture **)malloc(sizeof(SDL_Texture *) * 33)))
 		clean_exit(data, "Sprites malloc error");
 	nullify_tab((void**)data->sprites, 33);

@@ -24,7 +24,7 @@ static void		print_menu_arrow(t_data *data, t_point offset)
 		j = -1;
 		while (++j < 30)
 		{
-			color = get_pixel(data->surface[12], i, j);
+			color = get_pixel(data->surface[13], i, j);
 			if (color != 0)
 				data->pixels[i + offset.x
 					+ (j + offset.y) * SCREEN_WIDTH] = color;

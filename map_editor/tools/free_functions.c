@@ -17,9 +17,17 @@ void		ft_free_map(t_map *map)
 	int		i;
 
 	i = -1;
-	while (++i < map->y)
-		free(map->map[i]);
-	free(map);
+	if (map)
+	{
+		while (++i < map->y)
+		{
+			if (map->map[i])
+				free(map->map[i]);
+		}
+		if (map->map)
+			free(map->map);
+		free(map);
+	}
 }
 
 void		ft_free_fdf(t_fdf *fdf)
@@ -63,14 +71,15 @@ void		ft_clean_exit(t_fdf *img, char *err)
 {
 	if (err)
 		ft_putendl_fd(err, 2);
-	ft_free_textures(img);
-	if (img->grid != NULL)
+	if (img)
+		ft_free_textures(img);
+	if (img && img->grid != NULL)
 		SDL_DestroyTexture(img->grid);
-	if (img->renderer != NULL)
+	if (img && img->renderer != NULL)
 		SDL_DestroyRenderer(img->renderer);
-	if (img->pixels != NULL)
+	if (img && img->pixels != NULL)
 		free(img->pixels);
-	if (img->window)
+	if (img && img->window)
 		SDL_DestroyWindow(img->window);
 	if (TTF_WasInit())
 		TTF_Quit();

@@ -27,11 +27,11 @@ void			print_buttons_delete_and_save(t_fdf *img)
 	SDL_Rect	rect;
 	SDL_Texture	*texture;
 
-	rect = (SDL_Rect){1120, 650, 230, 112};
-	texture = img->texture[19];
+	rect = (SDL_Rect){1120, 650 + 110, 200, 97};
+	texture = img->texture[23];
 	SDL_RenderCopy(img->renderer, texture, NULL, &rect);
-	rect = (SDL_Rect){1120, 650 + 132, 230, 112};
-	texture = img->texture[20];
+	rect = (SDL_Rect){1120, 650 + 115 + 97, 200, 97};
+	texture = img->texture[24];
 	SDL_RenderCopy(img->renderer, texture, NULL, &rect);
 }
 
@@ -41,10 +41,8 @@ void			draw_menu_textures(t_fdf *img)
 	t_pt		pt;
 
 	i = 0;
-	while (++i <= 18)
+	while (++i <= 22)
 	{
-		if (i == 12)
-			i++;
 		pt.x = 1120 + (((i - 1) % 3) * 80);
 		pt.y = 120 + (((i - 1) / 3) * 80);
 		ft_print_blocks(pt, i, img, 70);

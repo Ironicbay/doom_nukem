@@ -36,7 +36,6 @@ SRC = init/main.c \
 	   tools/free_functions.c \
 	   tools/free_path_tab.c \
 	   tools/gnl_incoming_map.c \
-	   tools/change_appearance.c \
 	   init/center_map.c \
 	   init/mouse_and_key_init.c \
 	   init/surfaces_init.c \

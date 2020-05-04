@@ -12,7 +12,7 @@
 
 #include "../../hdr/map_editor.h"
 
-void		initialize_and_write_lines(t_fdf *img, int loop)
+void		initialize_and_write_lines(t_fdf *img, t_mouse *mous)
 {
 	ft_bzero(img->pixels, WIDTH * HEIGHT * sizeof(Uint32));
 	ft_print_grid(img);
@@ -24,12 +24,12 @@ void		initialize_and_write_lines(t_fdf *img, int loop)
 			ft_clean_exit(img, (char *)SDL_GetError());
 	}
 	draw_menu_squares(img);
-	ft_print_pressed_button(img, loop);
+	ft_print_pressed_button(img, mous);
 }
 
-void		ft_clear_and_render(t_fdf *img, int loop)
+void		ft_clear_and_render(t_fdf *img, t_mouse *mous)
 {
-	initialize_and_write_lines(img, loop);
+	initialize_and_write_lines(img, mous);
 	SDL_UpdateTexture(img->grid, NULL, img->pixels, WIDTH * 4);
 	SDL_RenderCopy(img->renderer, img->grid, NULL, NULL);
 	ft_parse_and_print_textures(img);

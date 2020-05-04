@@ -56,6 +56,22 @@ void			imp_state_machine(t_data *data, t_object *obj)
 	}
 }
 
+void			cast_objects(t_data *data)
+{
+	t_object	*iterator;
+
+	if (data->obj)
+	{
+		rollback_object(&(data->obj));
+		iterator = data->obj;
+		while (iterator)
+		{
+			objectcaster(data, iterator);
+			iterator = iterator->next;
+		}
+	}
+}
+
 void			state_machine(t_data *data)
 {
 	t_object	*iterator;
@@ -72,7 +88,7 @@ void			state_machine(t_data *data)
 				imp_state_machine(data, iterator);
 			else if (iterator->obj_type == 1)
 				soul_state_machine(data, iterator);
-			objectcaster(data, iterator);
+			iterator->visible = 0;
 			iterator = iterator->next;
 		}
 	}

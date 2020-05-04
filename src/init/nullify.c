@@ -46,6 +46,7 @@ void	nullify_mallocs(t_data *data)
 	data->maps[3].map = NULL;
 	data->cur_map.map = NULL;
 	data->zbuffer = NULL;
+	data->e_zbuffer = NULL;
 	data->obj = NULL;
 	data->hud.font = NULL;
 	data->hud.hud_texture = NULL;

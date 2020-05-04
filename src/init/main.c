@@ -33,13 +33,16 @@ void	free_maps(t_data *data)
 	j = -1;
 	while (++j < 4)
 	{
-		i = data->maps[j].height - 1;
-		while (i >= 0)
+		if (data->maps[j].map)
 		{
-			free(data->maps[j].map[i]);
-			i--;
+			i = data->maps[j].height - 1;
+			while (i >= 0)
+			{
+				free(data->maps[j].map[i]);
+				i--;
+			}
+			free(data->maps[j].map);
 		}
-		free(data->maps[j].map);
 	}
 }
 
@@ -56,9 +59,6 @@ int		main(int ac, char **av)
 	if (ac > 2)
 		return (print_usage());
 	set_values(&data, ac);
-	init(&data);
-	loadmedia(&data);
-	prepare_hud(&data);
 	new_map(&data, "maps/level_1.doom", 0);
 	new_map(&data, "maps/level_2.doom", 1);
 	new_map(&data, "maps/level_3.doom", 2);
@@ -69,9 +69,10 @@ int		main(int ac, char **av)
 		else
 			clean_exit(&data, "");
 	}
+	init(&data);
+	loadmedia(&data);
+	prepare_hud(&data);
 	game_loop(&data);
-	free_maps(&data);
-	delete_cur_map(&data);
 	clean_exit(&data, NULL);
 	return (0);
 }

@@ -99,7 +99,7 @@ void			fill_map(t_data *data, t_map map)
 				data->p.pos.y = j + 0.5;
 				data->cur_map.map[i][j] = 0;
 			}
-			else if (map.map[i][j] >= '0' && map.map[i][j] <= '7')
+			else if (map.map[i][j] >= '0' && map.map[i][j] <= '8')
 			{
 				data->cur_map.map[i][j] = map.map[i][j] - '0';
 			}

@@ -14,6 +14,8 @@
 # define STRUCT_H
 # include "doom_nukem.h"
 
+# define NB_THREAD 8
+
 typedef union		u_color
 {
 	Uint32			number;
@@ -189,6 +191,8 @@ typedef struct		s_map
 	int				**map;
 	int				width;
 	int				height;
+	short			ceiling;
+	short			night;
 }					t_map;
 
 typedef struct		s_data
@@ -197,6 +201,7 @@ typedef struct		s_data
 	SDL_Renderer	*renderer;
 	SDL_Texture		*texture;
 	SDL_Surface		**surface;
+	pthread_t		thread[NB_THREAD];
 	t_sprite		*obj_sprite;
 	SDL_Texture		**sprites;
 	SDL_Texture		*weapon_texture;
@@ -216,6 +221,7 @@ typedef struct		s_data
 	short			ceiling;
 
 	double			*zbuffer;
+	double			*e_zbuffer;
 	t_object		*obj;
 	t_hud			hud;
 
@@ -230,6 +236,10 @@ typedef struct		s_data
 	short			enter_screen;
 	short			exit_screen;
 	short			death_screen;
+
+	t_point			is_window;
+	short			hit_window;
+	double			window_dist;
 }					t_data;
 
 #endif

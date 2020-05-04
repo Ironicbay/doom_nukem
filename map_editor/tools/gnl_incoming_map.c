@@ -41,6 +41,14 @@ static void		add_new_line(char *linetmp, t_line **line)
 	tmp->next = tmp2;
 }
 
+static short	check_first_line(char *line)
+{
+	if (ft_strcmp(line, "0,") && ft_strcmp(line, "1,")
+			&& ft_strcmp(line, "2,") && ft_strcmp(line, "3,"))
+		return (0);
+	return (1);
+}
+
 t_line			*ft_list_alloc(int fd)
 {
 	char		*linetmp;
@@ -51,8 +59,11 @@ t_line			*ft_list_alloc(int fd)
 	{
 		if (line == NULL)
 		{
-			if (!(line = ft_newline(linetmp)))
+			if (!check_first_line(linetmp) || !(line = ft_newline(linetmp)))
+			{
+				free(linetmp);
 				return (NULL);
+			}
 		}
 		else
 			add_new_line(linetmp, &line);

@@ -53,7 +53,7 @@ static short	health_pickup(t_data *data, t_object **obj)
 
 static short	picked_up_item(t_data *data, t_object **obj)
 {
-	if ((*obj)->dist_to_player < 1)
+	if ((*obj)->dist_to_player < 0.5)
 	{
 		if ((*obj)->obj_type == 4 && data->p.bullets < 200)
 			return (bullet_pickup(data, obj));

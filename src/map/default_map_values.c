@@ -14,8 +14,8 @@
 
 static void	get_map1_values(t_data *data)
 {
-	data->ceiling = 1;
-	data->shaded = 0;
+	data->ceiling = data->maps[0].ceiling;
+	data->shaded = data->maps[0].night;
 	data->toggle_minimap = 1;
 	data->p.dir.x = 1;
 	data->p.plane.y = -0.66;
@@ -30,8 +30,8 @@ static void	get_map1_values(t_data *data)
 
 static void	get_map2_values(t_data *data)
 {
-	data->ceiling = 0;
-	data->shaded = 1;
+	data->ceiling = data->maps[1].ceiling;
+	data->shaded = data->maps[1].night;
 	data->toggle_minimap = 0;
 	data->p.dir.x = 1;
 	data->p.plane.y = -0.66;
@@ -44,8 +44,8 @@ static void	get_map2_values(t_data *data)
 
 static void	get_map3_values(t_data *data)
 {
-	data->ceiling = 0;
-	data->shaded = 0;
+	data->ceiling = data->maps[2].ceiling;
+	data->shaded = data->maps[2].night;
 	data->toggle_minimap = 1;
 	data->p.dir.x = 1;
 	data->p.plane.y = -0.66;
@@ -58,8 +58,8 @@ static void	get_map3_values(t_data *data)
 
 static void	get_custom_map_values(t_data *data)
 {
-	data->ceiling = 1;
-	data->shaded = 0;
+	data->ceiling = data->maps[3].ceiling;
+	data->shaded = data->maps[3].night;
 	data->p.dir.x = 1;
 	data->p.plane.y = -0.66;
 	data->toggle_minimap = 1;

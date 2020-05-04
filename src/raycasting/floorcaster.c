@@ -57,7 +57,8 @@ void			roofcaster(t_data *data, t_raycast *r, int x)
 		f.floortex.x = (int)(f.currentfloor.x * 64) % 64;
 		f.floortex.y = (int)(f.currentfloor.y * 64) % 64;
 		color = (get_pixel(data->surface[4], f.floortex.x, f.floortex.y));
-		data->pixels[x + y * SCREEN_WIDTH] = shaded_color(data, color,
+		if (data->pixels[x + y * SCREEN_WIDTH] == 0)
+			data->pixels[x + y * SCREEN_WIDTH] = shaded_color(data, color,
 														f.currentdist, NULL);
 		y--;
 	}
@@ -69,10 +70,10 @@ void			floorcaster(t_data *data, t_raycast *r, int x)
 	int			y;
 	int			color;
 
-	y = r->drawend;
+	y = r->drawend - 1;
 	f.currentdist = 0;
 	floor_side(&f, r);
-	while (y < SCREEN_HEIGHT)
+	while (++y < SCREEN_HEIGHT)
 	{
 		f.currentdist = (double)SCREEN_HEIGHT / (double)(2 * y
 			- (SCREEN_HEIGHT + data->yaw) + 1);
@@ -84,10 +85,8 @@ void			floorcaster(t_data *data, t_raycast *r, int x)
 		f.floortex.x = (int)(f.currentfloor.x * 64) % 64;
 		f.floortex.y = (int)(f.currentfloor.y * 64) % 64;
 		color = (get_pixel(data->surface[3], f.floortex.x, f.floortex.y));
-		data->pixels[x + y * SCREEN_WIDTH] = shaded_color(data, color,
+		if (data->pixels[x + y * SCREEN_WIDTH] == 0)
+			data->pixels[x + y * SCREEN_WIDTH] = shaded_color(data, color,
 														f.currentdist, NULL);
-		y++;
 	}
-	if (data->ceiling)
-		roofcaster(data, r, x);
 }

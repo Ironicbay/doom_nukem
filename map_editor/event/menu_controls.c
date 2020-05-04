@@ -14,17 +14,21 @@
 
 void			set_mous_loop(t_mouse *mous, int i)
 {
-	if (i == 12)
-		return ;
-	mous->loop = i;
+	if (i < 19)
+		mous->loop = i;
+	else
+	{
+		if ((i - 19) < 2)
+			mous->mtime = i - 19;
+		else
+			mous->mceiling = i - 21;
+	}
 }
 
 void			ft_menu_event(t_mouse *mous, SDL_Event e)
 {
 	int			tmx;
 	int			tmy;
-	int			x;
-	int			y;
 	int			i;
 
 	if (e.type == SDL_MOUSEBUTTONDOWN)
@@ -32,16 +36,16 @@ void			ft_menu_event(t_mouse *mous, SDL_Event e)
 		if (e.button.button == SDL_BUTTON_LEFT)
 		{
 			SDL_GetMouseState(&tmx, &tmy);
-			if (tmx >= 1120 && tmx <= 1355 && tmy >= 120 && tmy <= 600)
+			if (tmx >= 1120 && tmx <= 1355 && tmy >= 120 && tmy <= 680)
 			{
-				x = (tmx - 1120) / 80;
-				y = (tmy - 120) / 80;
-				i = y * 3 + x + 1;
+				i = ((tmy - 120) / 80) * 3 + ((tmx - 1120) / 80) + 1;
 				set_mous_loop(mous, i);
 			}
-			if (tmx >= 1120 && tmx <= 1350 && tmy >= 650 && tmy <= 762)
+			if (tmy >= 680 && tmy <= 750 && tmx >= 1120 && tmx <= 1190)
+				set_mous_loop(mous, 22);
+			if (tmx >= 1120 && tmx <= 1320 && tmy >= 760 && tmy <= 760 + 97)
 				set_mous_loop(mous, 0);
-			if (tmx >= 1120 && tmx <= 1350 && tmy >= 782 && tmy <= 894)
+			if (tmx >= 1120 && tmx <= 1320 && tmy >= 862 && tmy <= 862 + 97)
 				set_mous_loop(mous, -1);
 		}
 	}

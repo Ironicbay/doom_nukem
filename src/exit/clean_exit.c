@@ -37,7 +37,7 @@ static void	free_surf_and_sprites(t_data *data)
 
 	if (data->surface && (i = -1))
 	{
-		while (++i < 20)
+		while (++i < 21)
 			if (data->surface[i])
 				SDL_FreeSurface(data->surface[i]);
 		free(data->surface);
@@ -82,17 +82,26 @@ static void	free_hud(t_data *data)
 		SDL_DestroyTexture(data->hud.infinite_text);
 }
 
+static void	free_self_alloc_structs(t_data *data)
+{
+	if (data->zbuffer)
+		free(data->zbuffer);
+	if (data->e_zbuffer)
+		free(data->e_zbuffer);
+	if (data->pixels)
+		free(data->pixels);
+}
+
 void		clean_exit(t_data *data, char *err)
 {
 	if (err)
 		ft_putendl_fd(err, 2);
+	free_maps(data);
+	delete_cur_map(data);
 	free_surf_and_sprites(data);
 	free_hud(data);
 	free_objects(data);
-	if (data->zbuffer)
-		free(data->zbuffer);
-	if (data->pixels)
-		free(data->pixels);
+	free_self_alloc_structs(data);
 	if (data->texture)
 		SDL_DestroyTexture(data->texture);
 	if (data->renderer)
@@ -105,8 +114,5 @@ void		clean_exit(t_data *data, char *err)
 		TTF_Quit();
 	if (SDL_WasInit(SDL_INIT_VIDEO) & SDL_INIT_VIDEO)
 		SDL_Quit();
-	if (err)
-		exit(EXIT_FAILURE);
-	else
-		exit(EXIT_SUCCESS);
+	exit(err ? EXIT_FAILURE : EXIT_SUCCESS);
 }

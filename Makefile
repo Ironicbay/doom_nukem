@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS = -Wall -Werror -Wextra -MMD `sdl2-config --cflags`
+CFLAGS = -Wall -Werror -Wextra -MMD `sdl2-config --cflags` -O2
 
 NAME = doom-nukem
 
@@ -32,6 +32,7 @@ SRC =	draw/display_hud.c\
 		game/health.c\
 		game/menu_inputs.c\
 		game/movement.c\
+		game/multi_thread.c\
 		game/weap_hits.c\
 		image/image_utils.c\
 		image/load_image.c\
@@ -65,7 +66,9 @@ SRC =	draw/display_hud.c\
 		raycasting/floorcaster.c\
 		raycasting/objectcasting.c\
 		raycasting/raycasting.c\
+		raycasting/raycast_utils.c\
 		raycasting/set_objcast_values.c\
+		raycasting/windowcasting.c\
 		skybox/skybox.c\
 		story/display_story_screen.c\
 		story/text_screen_inputs.c\
@@ -104,7 +107,7 @@ all: $(SUBDIRS)
 
 $(NAME): $(OBJS) $(INCLUDES)
 	@echo "\033[2K \033[A"
-	@clang $(CFLAGS) -o $(NAME) $(OBJS) $(LIB) $(LIBFT) -lm
+	@clang $(CFLAGS) -o $(NAME) $(OBJS) $(LIB) $(LIBFT) -lm -lpthread
 	@echo "\033[32m[$(NAME)]: compiled\033[0m"
 
 $(SUBDIRS):

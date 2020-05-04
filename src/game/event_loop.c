@@ -49,10 +49,9 @@ static void		manage_sdl_events(SDL_Event *e, t_data *data)
 
 static void		display_game(t_data *data)
 {
-	if (!data->ceiling)
-		print_skybox(data);
-	raycasting(data);
+	ft_bzero(data->e_zbuffer, SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(double));
 	state_machine(data);
+	thread_center(data);
 	item_pickup(data);
 	combat(data);
 	if (data->toggle_minimap)

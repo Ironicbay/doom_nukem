@@ -19,6 +19,7 @@ void		ft_draw_empty_map(int width, int height, int fd)
 
 	h = 0;
 	w = -1;
+	ft_putendl_fd("2,", fd);
 	while (++w < width - 1)
 		ft_putstr_fd("1,", fd);
 	ft_putstr_fd("1\n", fd);
@@ -108,10 +109,7 @@ int			main(int argc, char **argv)
 		return (0);
 	}
 	if (!(map = ft_parser(fd)))
-	{
-		map != NULL ? ft_free_map(map) : 0;
 		return (ft_error_fd("Invalid map", 2));
-	}
 	else
 		ft_fdf(map, argv[1]);
 	return (0);

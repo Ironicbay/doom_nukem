@@ -12,6 +12,12 @@
 
 #include "../../hdr/map_editor.h"
 
+void		ft_putnbr_comma_endl_fd(int nbr, int fd)
+{
+	ft_putnbr_fd(nbr, fd);
+	ft_putendl_fd(",", fd);
+}
+
 void		write_objects(int i, int fd)
 {
 	if (i == 7)
@@ -25,7 +31,7 @@ void		write_objects(int i, int fd)
 	else if (i == 11)
 		ft_putchar_fd('7', fd);
 	else if (i == 12)
-		ft_putchar_fd('0', fd);
+		ft_putchar_fd('8', fd);
 	else if (i == 13)
 		ft_putchar_fd('S', fd);
 	else if (i == 14)
@@ -78,6 +84,7 @@ void		ft_save_map(t_fdf *img)
 		ft_putendl(ft_itoa(fd));
 		ft_error_fd("Unable to write in the map file", 2);
 	}
+	ft_putnbr_comma_endl_fd(img->map->light_ceiling, fd);
 	write_tab(int_tab, width, height, fd);
 	ft_putstr("Map updated succesfully\n");
 	ft_clean_exit(img, NULL);

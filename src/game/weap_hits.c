@@ -22,6 +22,16 @@
 ** 6 : minigun
 */
 
+short			obj_mid_screen(t_object *obj)
+{
+	if ((obj->pix_mid_x < SCREEN_WIDTH / 10 * 4)
+			|| (obj->pix_mid_x > SCREEN_WIDTH / 10 * 6)
+			|| (obj->pix_mid_y < SCREEN_HEIGHT / 10 * 3)
+			|| (obj->pix_mid_y > SCREEN_HEIGHT / 10 * 8))
+		return (0);
+	return (1);
+}
+
 static void		deal_damage(t_object *obj, short weapon)
 {
 	short	damage;
@@ -50,10 +60,7 @@ static void		deal_damage(t_object *obj, short weapon)
 
 static short	hitscan(t_data *data, t_object *obj)
 {
-	if ((obj->pix_mid_x < SCREEN_WIDTH / 10 * 4)
-			|| (obj->pix_mid_x > SCREEN_WIDTH / 10 * 6)
-			|| (obj->pix_mid_y < SCREEN_HEIGHT / 10 * 4)
-			|| (obj->pix_mid_y > SCREEN_HEIGHT / 10 * 8))
+	if (!obj_mid_screen(obj))
 		return (0);
 	if ((data->p.selected_weapon == 0 || data->p.selected_weapon == 3)
 			&& obj->dist_to_player > 2)
@@ -75,8 +82,6 @@ void			hits_dealt(t_data *data)
 	iterator = data->obj;
 	while (iterator->next)
 		iterator = iterator->next;
-	if (data->p.has_fired)
-		return ;
 	while (iterator)
 	{
 		prev = iterator->prev;

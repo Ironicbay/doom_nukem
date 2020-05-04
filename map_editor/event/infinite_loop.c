@@ -12,12 +12,37 @@
 
 #include "../../hdr/map_editor.h"
 
+void			set_mlight_mceiling(t_fdf *img, t_mouse *mous)
+{
+	if (img->map->light_ceiling == 0)
+	{
+		mous->mtime = 0;
+		mous->mceiling = 1;
+	}
+	if (img->map->light_ceiling == 1)
+	{
+		mous->mtime = 1;
+		mous->mceiling = 1;
+	}
+	if (img->map->light_ceiling == 2)
+	{
+		mous->mtime = 0;
+		mous->mceiling = 0;
+	}
+	if (img->map->light_ceiling == 3)
+	{
+		mous->mtime = 1;
+		mous->mceiling = 0;
+	}
+}
+
 void			ft_infinite_loop(t_fdf *img, t_mouse *mous)
 {
 	int			isquit;
 	SDL_Event	event;
 
 	isquit = 0;
+	set_mlight_mceiling(img, mous);
 	while (isquit == 0)
 	{
 		while (SDL_PollEvent(&event))
@@ -28,7 +53,7 @@ void			ft_infinite_loop(t_fdf *img, t_mouse *mous)
 			ft_keys_event(img, event);
 			ft_mouse_event(img, mous, event);
 		}
-		ft_clear_and_render(img, mous->loop);
+		ft_clear_and_render(img, mous);
 	}
 }
 
@@ -43,6 +68,8 @@ void			ft_fdf(t_map *map, char *map_name)
 	if (!(ft_mouse_init(&mous)) || !(ft_key_init(&key)))
 		ft_clean_exit(img, "Problems during mouse or key initilization");
 	img->map = map;
-	ft_clear_and_render(img, mous.loop);
+	mous.mtime = 0;
+	mous.mceiling = 0;
+	ft_clear_and_render(img, &mous);
 	ft_infinite_loop(img, &mous);
 }

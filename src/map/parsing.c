@@ -25,10 +25,11 @@ short			parse_char(char *str)
 			p_num++;
 		else if (str[i] != '0' && str[i] != '1' && str[i] != '2'
 				&& str[i] != '3' && str[i] != '4' && str[i] != '5'
-				&& str[i] != '6' && str[i] != '7' && str[i] != ','
-				&& str[i] != 'E' && str[i] != 'B' && str[i] != 'S'
+				&& str[i] != '6' && str[i] != '7' && str[i] != '8'
+				&& str[i] != ',' && str[i] != 'E' && str[i] != 'S'
 				&& str[i] != 'C' && str[i] != 'H' && str[i] != 'A'
-				&& str[i] != 'K' && str[i] != 'L' && str[i] != 'D')
+				&& str[i] != 'K' && str[i] != 'L' && str[i] != 'D'
+				&& str[i] != 'B')
 		{
 			ft_putstr_fd("Invalid map data", 2);
 			return (0);
@@ -49,7 +50,7 @@ void			parse_boudaries(char *str, t_data *data, short id)
 	while (y < data->maps[id].height)
 	{
 		if (str[2 * (y * data->maps[id].width)] < '1'
-			|| str[2 * (y * data->maps[id].width)] > '7'
+			|| str[2 * (y * data->maps[id].width)] > '6'
 			|| str[2 * ((y + 1) * data->maps[id].width - 1)] < '1'
 			|| str[2 * ((y + 1) * data->maps[id].width - 1)] > '6')
 			clean_exit(data, "Incomplete boundaries");

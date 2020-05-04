@@ -52,8 +52,7 @@ void			free_maps(t_data *data);
 */
 
 char			*join_strings(char *s1, char *s2);
-void			allocate_map(t_data *data, short id);
-char			*read_map(int fd);
+char			*read_map(int fd, t_map *map);
 void			new_map(t_data *data, char *title, short id);
 short			map_too_big(char *name);
 
@@ -79,6 +78,8 @@ void			draw_minimap(t_data *data);
 
 void			handle_input(t_data *data, const Uint8 *state);
 void			handle_menu_input(t_data *data, const Uint8 *state);
+int				which_thread(t_data *data);
+void			thread_center(t_data *data);
 void			game_loop(t_data *data);
 
 /*
@@ -95,7 +96,8 @@ void			show_enemies(t_data *data, t_point length);
 void			give_draw_values(t_raycast *values, t_data *data);
 void			get_texturing_values(t_raycast *values, t_data *data);
 void			set_dist_and_step(t_raycast *values);
-void			hit_wall(t_raycast *values, t_data *data);
+short			hit_wall(t_raycast *values, t_data *data);
+void			column_calc(t_data *data, t_raycast *r, t_point pt);
 void			raycasting(t_data *data);
 
 /*
@@ -132,6 +134,12 @@ void			roofcaster(t_data *data, t_raycast *r, int x);
 void			floorcaster(t_data *data, t_raycast *r, int x);
 
 /*
+** Window caster
+*/
+
+void			windowcasting(t_data *data);
+
+/*
 ** movement
 */
 
@@ -144,7 +152,7 @@ void			look_up_down(t_data *data);
 ** skybox
 */
 
-void			print_skybox(t_data *data);
+void			print_skybox(t_data *data, t_raycast *r, int x);
 
 /*
 ** HUD
@@ -173,6 +181,7 @@ short			use_minigun(t_data *data, short is_firing);
 
 void			combat(t_data *data);
 void			hits_dealt(t_data *data);
+short			obj_mid_screen(t_object *obj);
 void			red_hit_screen(t_data *data);
 void			green_hp_screen(t_data *data);
 void			blue_hp_screen(t_data *data);
@@ -196,6 +205,7 @@ short			count_enemies(t_data *data);
 
 void			sort_objects(t_data *data);
 void			objectcaster(t_data *data, t_object *obj);
+void			cast_objects(t_data *data);
 void			set_objcast_values(t_data *data, t_objcast *val,
 						t_object *iterator, t_sprite sprite);
 int				get_movescreen_value(t_data *data, t_objcast o, int pos);

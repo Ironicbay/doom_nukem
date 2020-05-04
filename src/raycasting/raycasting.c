@@ -12,111 +12,52 @@
 
 #include "../../hdr/doom_nukem.h"
 
-void	set_dist_and_step(t_raycast *r)
+void	cast_one_pixel(t_data *data, t_raycast *r, t_point pt)
 {
-	if (r->ray.dir.x < 0)
-	{
-		r->step.x = -1;
-		r->sidedist.x = (r->ray.pos.x - r->m_pos.x) * r->deltadist.x;
-	}
-	else
-	{
-		r->step.x = 1;
-		r->sidedist.x = (r->m_pos.x + 1.0 - r->ray.pos.x) * r->deltadist.x;
-	}
-	if (r->ray.dir.y < 0)
-	{
-		r->step.y = -1;
-		r->sidedist.y = (r->ray.pos.y - r->m_pos.y) * r->deltadist.y;
-	}
-	else
-	{
-		r->step.y = 1;
-		r->sidedist.y = (r->m_pos.y + 1.0 - r->ray.pos.y) * r->deltadist.y;
-	}
+	r->tex.y = (pt.y * 2 - (SCREEN_HEIGHT + data->yaw) + r->lineheight)
+		* (r->texh / 2) / (r->lineheight + 1);
+	r->color = get_pixel(data->surface[r->texnum],
+			r->tex.x, r->tex.y);
+	if (data->pixels[pt.x + pt.y * SCREEN_WIDTH] == 0
+			|| (r->texnum == 7 && r->color != 0
+				&& (r->walldist < data->e_zbuffer[pt.x + pt.y * SCREEN_WIDTH]
+					|| data->e_zbuffer[pt.x + pt.y * SCREEN_WIDTH] == 0)))
+		data->pixels[pt.x + pt.y * SCREEN_WIDTH] = shaded_color(data,
+				r->color, r->walldist, NULL);
+	if (r->texnum == 7 && pt.x == SCREEN_WIDTH / 2
+			&& pt.y > SCREEN_HEIGHT / 10 * 3 && pt.y < SCREEN_HEIGHT / 10 * 8)
+		data->hit_window = 1;
 }
 
-void	get_texturing_values(t_raycast *r, t_data *data)
+void	column_calc(t_data *data, t_raycast *r, t_point pt)
 {
-	if (r->side == 0)
-	{
-		r->walldist = fabs((r->m_pos.x - r->ray.pos.x + (1 - r->step.x) / 2)
-				/ r->ray.dir.x);
-		r->wall = r->ray.pos.y + r->walldist * r->ray.dir.y;
-	}
-	else
-	{
-		r->walldist = fabs((r->m_pos.y - r->ray.pos.y + (1 - r->step.y) / 2)
-				/ r->ray.dir.y);
-		r->wall = r->ray.pos.x + r->walldist * r->ray.dir.x;
-	}
-	r->texnum = data->cur_map.map[r->m_pos.x][r->m_pos.y] - 1;
-	r->wall -= floor(r->wall);
-	r->texw = data->surface[r->texnum]->w;
-	r->texh = data->surface[r->texnum]->h;
-	r->tex.x = r->wall * r->texh;
-	r->lineheight = abs((int)(SCREEN_HEIGHT / r->walldist));
-}
-
-void	hit_wall(t_raycast *r, t_data *data)
-{
-	while (r->hit == 0)
-	{
-		if (r->sidedist.x < r->sidedist.y)
-		{
-			r->sidedist.x += r->deltadist.x;
-			r->m_pos.x += r->step.x;
-			r->side = 0;
-		}
-		else
-		{
-			r->sidedist.y += r->deltadist.y;
-			r->m_pos.y += r->step.y;
-			r->side = 1;
-		}
-		if (data->cur_map.map[r->m_pos.x][r->m_pos.y] > 0)
-			r->hit = 1;
-	}
-}
-
-void	give_draw_values(t_raycast *r, t_data *data)
-{
-	if (r->lineheight < 0)
-		r->lineheight = SCREEN_HEIGHT;
-	r->drawstart = -r->lineheight / 2 + (SCREEN_HEIGHT + data->yaw) / 2;
-	if (r->drawstart < 0)
-		r->drawstart = 0;
-	r->drawend = r->lineheight / 2 + (SCREEN_HEIGHT + data->yaw) / 2;
-	if (r->drawend >= SCREEN_HEIGHT)
-		r->drawend = SCREEN_HEIGHT;
-	if (r->drawend < 0)
-		r->drawend = SCREEN_HEIGHT;
+	get_texturing_values(r, data);
+	give_draw_values(r, data);
+	pt.y = r->drawstart - 1;
+	while (++pt.y <= r->drawend && is_in_frame(pt))
+		cast_one_pixel(data, r, pt);
 }
 
 void	raycasting(t_data *data)
 {
 	t_raycast	r;
 	t_point		pt;
+	int			end;
 
-	pt.x = -1;
-	while (++pt.x < SCREEN_WIDTH)
+	pt.x = which_thread(data) * (SCREEN_WIDTH / NB_THREAD) - 1;
+	end = pt.x + 1 + (SCREEN_WIDTH / NB_THREAD);
+	while (++pt.x < end)
 	{
 		set_raycast_values(&r, data->p, pt.x);
 		set_dist_and_step(&r);
-		hit_wall(&r, data);
-		get_texturing_values(&r, data);
-		give_draw_values(&r, data);
-		pt.y = r.drawstart - 1;
-		while (++pt.y <= r.drawend && is_in_frame(pt))
-		{
-			r.tex.y = (pt.y * 2 - (SCREEN_HEIGHT + data->yaw) + r.lineheight)
-											* (r.texh / 2) / (r.lineheight + 1);
-			r.color = get_pixel(data->surface[r.texnum],
-								r.tex.x, r.tex.y);
-			data->pixels[pt.x + pt.y * SCREEN_WIDTH] = shaded_color(data,
-													r.color, r.walldist, NULL);
-		}
+		while (hit_wall(&r, data) == 2)
+			;
+		column_calc(data, &r, pt);
 		data->zbuffer[pt.x] = r.walldist;
 		floorcaster(data, &r, pt.x);
+		if (data->ceiling)
+			roofcaster(data, &r, pt.x);
+		else
+			print_skybox(data, &r, pt.x);
 	}
 }

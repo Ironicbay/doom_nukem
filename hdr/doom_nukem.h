@@ -13,8 +13,8 @@
 #ifndef DOOM_NUKEM_H
 # define DOOM_NUKEM_H
 
-# include "SDL.h"
-# include "SDL_ttf.h"
+# include "/usr/include/SDL2/SDL.h"
+# include "/usr/include/SDL2/SDL_ttf.h"
 # include "struct.h"
 # include "proto.h"
 # include "../libft/inc/libft.h"
@@ -24,6 +24,7 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <math.h>
+# include <pthread.h>
 
 # define SCREEN_WIDTH 1280
 # define SCREEN_HEIGHT 720
