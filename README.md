@@ -18,3 +18,8 @@ In-game commands
 Objects are picked up upon walking on them. They won't be picked up if the player can't carry more of that resource.
 To finish a story level, all enemies on the map must be killed.
 The floating enemies can only be killed with the BFG, which use cells as ammo.
+
+![](readme_images/doom_gif1.gif)
+![](readme_images/doom_gif2.gif)
+![](readme_images/doom_gif3.gif)
+![](readme_images/doom_gif4.gif)

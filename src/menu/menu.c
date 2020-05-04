@@ -79,7 +79,7 @@ static void	print_menu_text(t_data *data)
 
 void		menu(t_data *data)
 {
-	print_menu_background(data, ((int)(data->time / 60) % 20) * 360);
+	print_menu_background(data, ((int)(data->time / 50) % 20) * 360);
 	print_menu_text(data);
 	menu_selection(data);
 }

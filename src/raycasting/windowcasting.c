@@ -29,7 +29,9 @@ void	windowcasting(t_data *data)
 			column_calc(data, &r, pt);
 			if (pt.x == SCREEN_WIDTH / 2 && r.texnum == 7
 					&& (data->window_dist >= r.walldist
-						|| !data->window_dist))
+						|| !data->window_dist
+						|| (data->is_window.x != r.m_pos.x
+							&& data->is_window.y != r.m_pos.y)))
 			{
 				data->is_window.x = r.m_pos.x;
 				data->is_window.y = r.m_pos.y;
